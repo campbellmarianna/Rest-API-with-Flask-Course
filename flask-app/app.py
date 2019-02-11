@@ -1,51 +1,73 @@
-# your browser handles request
-# a flask application receives a request from your browser
-    # a request may ask for the homepage
-# a server must be created to understand that request
-# classes always start with a captle is a class, start with lowercase is a package
-from flask import Flask
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__) # create a object in Flask and give it a unique name - give each file a unique name
+# JSON always uses double quotes
+stores = [
+    {
+        'name': 'My Wonderful Store',
+        'items': [
+            {
+            'name': 'My Item',
+            'price': 15.99
+            }
+        ]
+    }
+]
 
-@app.route('/') # http://www.google.com/ # the route or the endpoint it is going to understand - the end slash means that it is the home page of the application
-def home(): # create a method home
-    return "Hello, world!" # return a response to our browser so that it receives something back and can show something on our website
+@app.route('/')
+def home():
+    return render_template('index.html')
+    
+# We are a server
+# POST - used to receive data
+# GET - used to send data back only
 
+# POST /store data: {name:}
+@app.route('/store', methods=['POST'])
+def create_store():
+    request_data = request.get_json()
+    new_store = {
+        'name': request_data['name'],
+        'items': []
+    }
+    stores.append(new_store)
+    return jsonify(new_store)
+
+# GET /store/<string:name>
+@app.route('/store/<string:name>') # 'http://127.0.01:5000/store/some_name'
+def get_store(name):
+    for store in stores: # Iterate over stores
+        if store['name'] is name: # if the store name matches, return it
+            return jsonify(store)
+    return jsonify({'message': 'Store not found.'}) # if none match, return an error message
+
+# GET /store
+@app.route('/store')
+def get_stores():
+    return jsonify({'stores': stores}) # our dictionary has a key stores and a value our stores # we make are stores a dictionary so we can jsonify that
+
+# POST /store/<string:name>/item {name:, price:}
+@app.route('/store/<string:name>/item', methods=['POST'])
+def create_item_in_store(name):
+    request_data = request.get_json()
+    for store in stores:
+        if store['name'] == name:
+            new_item = {
+                'name' : request_data['name'],
+                'price' : request_data['price']
+            }
+            stores['items'].append(new_item)
+            return jsonify(new_item)
+    return jsonify({'message': 'Store not found.'}) # if store is not found this error will run
+
+# GET /store/<string:name>/item
+@app.route('/store/<string:name>/item')
+def get_items_in_store(name):
+    for store in stores:
+        if store['name'] is name:
+            return jsonify({'items': store['items']})
+    return  jsonify({'message' :'No items found.'})
+
+# JSON - is a list of dictionaries - very useful to send data between applications - JSON is not a dictionary - JSON is text as a string
 app.run(port=5000)# we have to tell the app to start running
 # we have to tell the a specific port an area of the computer where your app is going to receiving your request and returning your response through
-
-
-# What we know
-    # Going to a site does a GET request
-    # This normally returns HTML
-    # We can return other things
-    # We can do other than GET EX: POST
-# What is a REST API?
-# It's a way of thinking about how a web server responds to your requests
-# It doesn't respond with just data
-# It responds with resources (the server ask for something and responses with data this is different the server is asking for a resource a thing in the server)
-# Resources?
-# Similar to object-oriented programming
-# Think of the server as having resources, and each is able to interact with the pertinent request
-
-# Stateless
-# Another key feature is that REST is supposed to be stateless
-# This means one request connot depend on any other requests
-# The server only knows about the current request, and not any previous requests
-
-# For example:
-# POST item/chair creates an item
-# The server does not know the item now exists
-# GET /item/chair then goes to the database and checks to see if the item is there or an error otherwise
-# To get an item you do not need to have created an item before--the item could be in the database previously
-
-#Another example
-# A user logs in to a web application
-# The webserver does not know the user is logged in (since it does not remember any state)
-# What do we do?
-# The web application must send enough data to identify the user in every request, or else the server won't associate the request with the user
-
-# Confusing?
-# It's always confusing initially
-# As we program these APIs, a lot of these things will come naturally because often they make sense
-# Ask questions at any time, I'm always availble to help
