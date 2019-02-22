@@ -82,3 +82,13 @@
 # It's always confusing initially
 # As we program these APIs, a lot of these things will come naturally because often they make sense
 # Ask questions at any time, I'm always available to help
+
+---
+# The Header is the first thing that gets analyzed by the server.
+    # The first thing that Flask is going to look at is header to see what this request is
+
+# Postman is extremely useful for testing APIs in development
+
+# A REST API is going to be an interface between your program and other programs that call your API.
+
+# REST was designed to be stateless and to interact with resources

@@ -71,10 +71,3 @@ def get_item_in_store(name):
 
 app.run(port=5000)# we have to tell the app to start running
 # we have to tell the a specific port an area of the computer where your app is going to receiving your request and returning your response through
-
-# The Header is the first thing that gets analyzed by the server.
-    # The first thing that Flask is going to look at is header to see what this request is
-
-# Postman is extremely useful for testing APIs in development
-
-# A REST API is going to be an interface between your program and other programs that call your API.
