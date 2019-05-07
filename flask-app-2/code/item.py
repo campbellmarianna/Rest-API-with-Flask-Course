@@ -13,6 +13,8 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
+        # When interacting with a database the first thing you have to do is
+        # create a connection
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
