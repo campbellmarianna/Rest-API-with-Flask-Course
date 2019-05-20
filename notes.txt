@@ -96,3 +96,22 @@
 ---
 # That is why it is really important to go through tutorials so afterwards you can
 build it on your own and really learn what it is that your doing.
+
+---
+# SQLAlchemy (the original one) is used to easily store objects to a relational database.
+# Flask SQLAlchemy is essentially the same but is optimized to work with Flask - knowing
+# one will immediately mean you can use the other. There are only a couple differences
+# in setup and that's it.
+# Your going to understand the power of the ORM (Object Relational Mapper) which
+# SQLAlchemy is.
+
+# SQLAlchemy is a piece of software that allows us to very easily map our objects
+# to database rows, that may seem weird and a bit confusing but don't worry because
+# throughout this section we will explore exactly what that means particularly
+# in regards to how easy it is to code and to save things to a database as well as
+# delete them and things like that, essentially it is going to make things a lot easier
+
+# folders is python are also called packages were going to create a couple packages
+# there are minor differences
+# What we have to do to make these packages is the __init__.py
+# it tells python that it call look within these folders and find python files
