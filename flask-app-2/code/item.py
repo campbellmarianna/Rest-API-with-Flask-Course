@@ -92,15 +92,36 @@ class Item(Resource):
         return {'message': 'Item deleted'}
 
     def put(self, name):
+        """
+        Update an item at a given name or insert if not found
+        """
         data = Item.parser.parse_args()
 
-        item = next(filter(lambda x: x['name'] == name, items), None)
+        item = self.find_by_name(name)
+        updated_item = {'name': name, 'price': data['price']} # this dictionary represents the updated item
         if item is None:
-            item = {'name': name, 'price': data['price']}
-            items.append(item)
+            try:
+                self.insert(updated_item)
+            except:
+                return {"message": "An error occurred inserting the item."}, 500
         else: # update an item if it was already there
-            item.update(data)
-        return item
+            try:
+                item.update(updated_item)
+            except:
+                return {"message": "An error occurred inserting the item."}, 500
+        return updated_item
+
+    @classmethod
+    def update(cls, item):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+
+        query = "UPDATE items SET price=? WHERE name=?"
+        cursor.execute(query, (item['price'], item['name']))
+
+        connection.commit()
+        connection.close()
+
 
 class ItemList(Resource):
     TABLE_NAME = 'items'
