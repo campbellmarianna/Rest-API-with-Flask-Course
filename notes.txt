@@ -92,3 +92,7 @@
 # A REST API is going to be an interface between your program and other programs that call your API.
 
 # REST was designed to be stateless and to interact with resources
+
+---
+# That is why it is really important to go through tutorials so afterwards you can
+build it on your own and really learn what it is that your doing.

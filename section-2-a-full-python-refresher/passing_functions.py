@@ -12,7 +12,7 @@ my_list = [13, 56, 77, 484]
 
 def not_thirteen(x):
     return x != 13
-    
+
 # filter this list using this function - basicly all of the numbers that were not 13
 print(list(filter(not_thirteen, my_list))) # method that allows you keep only some values, takes in an iterator
 
