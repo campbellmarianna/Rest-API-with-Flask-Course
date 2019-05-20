@@ -25,7 +25,7 @@ class Item(Resource):
     @classmethod
     def find_by_name(cls, name):
         connection = sqlite3.connect('data.db') # connect to the database
-        cursor = connection.cursor() # get a cursor
+        cursor = connection.cursor() # get a cursor after creating the connection to execute SQL statements
 
         query = "SELECT * FROM items WHERE name=?" # select the item
         result = cursor.execute(query, (name,)) # run the query
@@ -86,7 +86,7 @@ class Item(Resource):
         query = "DELETE FROM items WHERE name=?"
         cursor.execute(query, (name,))
 
-        connection.commit()
+        connection.commit() # save what we've done
         connection.close()
 
         return {'message': 'Item deleted'}
@@ -130,13 +130,13 @@ class ItemList(Resource):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
-        query = "SELECT * FROM {table}".format(table=self.TABLE_NAME)
-        result = cursor.execute(query)
+        query = "SELECT * FROM items"
+        result = cursor.execute(query) # allows us to go over each of the rows in the table
         items = []
         for row in result:
             items.append({'name': row[0], 'price': row[1]})
+
+
         connection.close()
 
         return {'items': items}
-
-# Left off at Retrieving our Item resources from a database 4 min in
