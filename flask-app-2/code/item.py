@@ -13,10 +13,14 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        item = self.find_by_name(name)
+        # find by name may fail prematurely so you might what to add a try except block
+        try:
+            item = self.find_by_name(name)
+        except: # Fails to run the search, raise an exception
+            {'message': 'Failed to run the search.'}
         if item:
             return item
-        return {'message': 'Item not found'}, 404
+        return {'message': 'Item not found'}, 404 # if the find by name fails to find something
 
     @classmethod
     def find_by_name(cls, name):
@@ -34,21 +38,42 @@ class Item(Resource):
     def post(self, name):
         if self.find_by_name(name):   # Error first approach - Handle Errors then do what we want to do
             return {"message": "An item with name '{}' already exists.".format(name)}, 400
+            # Something went wrong with the request
 
         data = Item.parser.parse_args() # parse through the data
 
-        item = {'name': name, 'price': data['price']}
+        item = {'name' : name, 'price' : data['price']}
 
+        try: # were going to try to insert the item in
+            self.insert(item) # there is a chase there may be  problem where the item
+            # is not inserted, if this is to happen python has a construct to deal
+            # with exceptions. An exception is what python runs whenever an error accurs
+        except: # Only runs if there was an error, an exception raised, and if we fail
+        # for any reason were just going to return a message
+            return {"message": "An error occurred inserting the item."}, 500 # Internal Server Error,
+            # that means something went wrong and we can't tell you exactly what, but something went
+            # wrong and it is not your fault. - Something didn't go wrong with the request but server
+            # messed up, so the user knows they didn't do anything wrong it is just the server that
+            # had a problem
+
+
+        return item, 201
+
+    @classmethod
+    def insert(cls, item):
+        """
+        Insert an item into the database
+        """
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
         query = "INSERT INTO items VALUES (?, ?)"
-        cursor.execute(query, (item['name'], item['price']))
+        cursor.execute(query, (item['name'], item['price'])) # the cursor may
+        # raise an exception if it cannot insert an item into the database
 
-        connection.commit()
+        connection.commit() # the commit may raise an exception of the connection
+        # gets closed prematurely
         connection.close()
-
-        return item, 201
 
     @jwt_required()
     def delete(self, name):
@@ -73,7 +98,7 @@ class Item(Resource):
         if item is None:
             item = {'name': name, 'price': data['price']}
             items.append(item)
-        else:
+        else: # update an item if it was already there
             item.update(data)
         return item
 
