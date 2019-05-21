@@ -1,10 +1,22 @@
 import sqlite3
+from db import db
 
-class UserModel: 
+class UserModel(db.Model): # entend models to db model
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integar, primary_key=True) # primary key makes it is easy to search based on id
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(80))
+
     def __init__(self, _id, username, password):
+        # these properties must match the columns for them to be saved to the database
         self.id = _id
         self.username = username
         self.password = password
+        self.something = 'hi' # we can have other properties but it won't be
+        # saved to the database. It also won't give us an error, it will exist
+        # in the object, but it won't be in anyway related to the database, it
+        # won't be stored it won't be read from the database
 
     @classmethod
     def find_by_username(cls, username):

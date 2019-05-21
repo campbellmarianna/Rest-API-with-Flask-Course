@@ -1,6 +1,20 @@
 import sqlite3
+from db import db
 
-class ItemModel:
+# We have told our app we have two models coming from our database - user and item models
+class ItemModel(db.Model):
+    __tablename__ = 'items'
+
+    """We have told SQLAlchemy how it can read these items by just looking at the
+    columns and when it does look at the columns its going to see the name and
+    the price and its going to pump them in straight into the init method and its
+    going to be able to create an object for each row in our database. The id
+    method will also be passed in but because there is no id parameter in the init
+    function it won't be used."""
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    price db.Column(db.Float(precision=2)) # floating point number a decimal number
+
     def __init__(self, name, price):
         self.name = name
         self.price = price

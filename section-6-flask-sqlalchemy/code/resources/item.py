@@ -46,7 +46,7 @@ class Item(Resource):
             # wrong and it is not your fault. - Something didn't go wrong with the request but server
             # messed up, so the user knows they didn't do anything wrong it is just the server that
             # had a problem
-        return .json(), 201
+        return item.json(), 201
 
     @jwt_required()
     def delete(self, name):

@@ -7,7 +7,14 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 
 app = Flask(__name__) # Flask is going to be our app and this app is going to have routes
-
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # the reason why we say this
+# essentially in order to know when an object had changed but not being saved to the
+# database the extension flask_sqlalchemy was tracking every change that we made
+# to the SQLAlchemy session and that took some resources, now were turning it off
+# because SQLAlchemy itself, the main library has its own modification tracker
+# which is a bit better, so this turns off the Flask SQLAlchemy Modification
+# tracker it does not turn off the SQLAlchemy Modification Tracker. This is only
+# changing the extensions behaviors not the underlining SQLAlchemy behavior.
 app.secret_key = 'jose'
 # imported from Flask-restful allows us to very easily add these routes it (okay for this resource you can get and post)
 api = Api(app)
@@ -19,4 +26,11 @@ api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 
 if __name__ == '__main__':
+    """We are importing this here because of a thing called circular imports, our
+    item models and things are going to import db as well so if we import db at
+    the top and we're also going to import the models at the  when we import the
+    model, the model is going to import the db and the db is going to be importted
+    here in the app that is going to create a circular import"""
+    from db import db
+    db.init_app(app)
     app.run(port=5000, debug=True)
