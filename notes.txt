@@ -115,3 +115,26 @@ build it on your own and really learn what it is that your doing.
 # there are minor differences
 # What we have to do to make these packages is the __init__.py
 # it tells python that it call look within these folders and find python files
+
+# What a model is?
+# We thought of our resource as things that an API responds with, things that API
+# clients can ask for and that is true that is what a resource is
+# Essentially a resource is what an API thinks of, it deals with resources such as
+# users, items, stores, students... basically similar to Object Oriented Programming.
+# So our class User is not a resource because the API cannot receive data through
+# this class or send this class as a json representation. This class is a helper that we
+# use to store some data about a user and also a helper that contains a couple of
+# methods that allows us to easily retrieve user objects from a database, so that
+# is what a model is, our internal representation of an entity while a resource
+# is an external representation of entity.
+# Our API clients such as a website or a mobile app think they're interacting
+with resources that is what they see and when our API responds it responds with
+# resources, again that is what the client sees. However, we deal internally
+# with our code with a user. For example, with our security.py file we are using
+# find by username for example were not using the resource were using the model
+# The model gives is more access without populating our resource
+
+
+# 81. Stopped at creating user and item models
+# I created multiply versions of the app
+# Test it each and every time
