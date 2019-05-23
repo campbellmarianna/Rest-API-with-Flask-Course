@@ -136,6 +136,6 @@ with resources that is what they see and when our API responds it responds with
 
 
 # 81. Stopped at creating user and item models
-# I created multiply versions of the app
+# I created 10s of different versions incrementally to make sure things were
+# working along the way
 # Test it each and every time
-# Test every time 
