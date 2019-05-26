@@ -35,7 +35,7 @@ class Item(Resource):
         item = ItemModel(name, data['price'])
 
         try: # were going to try to insert the item in
-            item.insert() # there is a chase there may be  problem where the item
+            item.save_to_db() # there is a chase there may be  problem where the item
             # is not inserted, if this is to happen python has a construct to deal
             # with exceptions. An exception is what python runs whenever an error accurs
         except: # Only runs if there was an error, an exception raised, and if we fail
@@ -52,14 +52,9 @@ class Item(Resource):
         """
         Delete the name in the URL from the database.
         """
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "DELETE FROM items WHERE name=?"
-        cursor.execute(query, (name,))
-
-        connection.commit() # save what we've done
-        connection.close()
+        item = ItemModel.find_by_name(name)
+        if item:
+            item.delete_from_db()
 
         return {'message': 'Item deleted'}
 
@@ -70,18 +65,16 @@ class Item(Resource):
         data = Item.parser.parse_args()
 
         item = ItemModel.find_by_name(name) # Item is the item we found in the database
-        updated_item = ItemModel(name, data['price']) # A new item - same name but different price
+
         if item is None:
-            try:
-                updated_item.insert()
-            except:
-                return {"message": "An error occurred inserting the item."}, 500
+            item = ItemModel.find_by_name(name, data['price'])
+
         else: # update an item if it was already there
-            try:
-                updated_item.update()
-            except:
-                return {"message": "An error occurred inserting the item."}, 500
-        return updated_item.json()
+            item.price = data['price']
+
+        item.save_to_db()
+
+        return item.json()
 
 
 class ItemList(Resource):

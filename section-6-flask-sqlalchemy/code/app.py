@@ -7,6 +7,7 @@ from resources.user import UserRegister
 from resources.item import Item, ItemList
 
 app = Flask(__name__) # Flask is going to be our app and this app is going to have routes
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db' # were saying data.db is going to run at the root of our folder
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # the reason why we say this
 # essentially in order to know when an object had changed but not being saved to the
 # database the extension flask_sqlalchemy was tracking every change that we made
@@ -18,6 +19,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # the reason why we say thi
 app.secret_key = 'jose'
 # imported from Flask-restful allows us to very easily add these routes it (okay for this resource you can get and post)
 api = Api(app)
+
+
+@app.before_first_request # before the first request runs it will do the code below
+def create_tables():
+    db.create_all()
 
 jwt = JWT(app, authenticate, identity) #/auth
 

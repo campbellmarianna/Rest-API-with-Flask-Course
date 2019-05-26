@@ -1,17 +1,15 @@
-import sqlite3
 from db import db
 # The model is an API, it exposes to endpoints to methods, find_by are to interfaces as far reading and retrieving from the database
 class UserModel(db.Model): # entend models to db model
     __tablename__ = 'users'
 
-    id = db.Column(db.Integar, primary_key=True) # primary key makes it is easy to search based on id
+    id = db.Column(db.Integer, primary_key=True) # primary key makes it is easy to search based on id
     # id auto increments, database manager SQLAlchemy gives the object an id, if we didn't want an an auto increment id we can create our own
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
 
     def __init__(self, username, password):
         # these properties must match the columns for them to be saved to the database
-        self.id = _id
         self.username = username
         self.password = password
         self.something = 'hi' # we can have other properties but it won't be
