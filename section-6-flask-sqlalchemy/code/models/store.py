@@ -2,6 +2,7 @@ import sqlite3
 from db import db
 
 # We have told our app we have two models coming from our database - user and item models
+# We create a model instead a resource because our resource uses the
 class StoreModel(db.Model):
     __tablename__ = 'stores'
 
@@ -13,12 +14,14 @@ class StoreModel(db.Model):
     function it won't be used."""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
+    
+    items = db.relationship('ItemModel', lazy='dymaic') # lists of item models - one to many
 
     def __init__(self, name):
         self.name = name
-
+    # util we call this json method we are not going into the table to get the methods - this is slower
     def json(self):
-        return {'name': self.name, 'price': self.price}
+        return {'name': self.name, 'items': [item.json() for item in self.items.all()]}
 
     @classmethod
     def find_by_name(cls, name):
@@ -28,27 +31,14 @@ class StoreModel(db.Model):
         #building a query on the database -
         return cls.query.filter_by(name=name).first() # SELECT * FROM items WHERE name=name LIMIT 1
 
-    def insert(self):
+
+    def save_to_db(self):
         """
         Insert an item into the database
         """
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
+        db.session.add(self) # add to the session
+        db.session.commit()
 
-        query = "INSERT INTO items VALUES (?, ?)"
-        cursor.execute(query, (self.name, self.price)) # the cursor may
-        # raise an exception if it cannot insert an item into the database
-
-        connection.commit() # the commit may raise an exception of the connection
-        # gets closed prematurely
-        connection.close()
-
-    def update(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "UPDATE items SET price=? WHERE name=?"
-        cursor.execute(query, (self.price, self.name))
-
-        connection.commit()
-        connection.close()
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()

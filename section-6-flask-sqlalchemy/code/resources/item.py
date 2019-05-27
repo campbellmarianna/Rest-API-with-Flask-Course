@@ -10,6 +10,11 @@ class Item(Resource):
         required=True,
         help="This field cannot be left blank!"
     )
+    parser.add_argument('store_id', # can use request parser to go through input fields
+        type=int,
+        required=True,
+        help="Every item needs a store id"
+    )
 
     @jwt_required()
     def get(self, name):
@@ -32,7 +37,7 @@ class Item(Resource):
 
         data = Item.parser.parse_args() # parse through the data
 
-        item = ItemModel(name, data['price'])
+        item = ItemModel(name, **data)
 
         try: # were going to try to insert the item in
             item.save_to_db() # there is a chase there may be  problem where the item
@@ -67,7 +72,7 @@ class Item(Resource):
         item = ItemModel.find_by_name(name) # Item is the item we found in the database
 
         if item is None:
-            item = ItemModel.find_by_name(name, data['price'])
+            item = ItemModel.find_by_name(name, **data)
 
         else: # update an item if it was already there
             item.price = data['price']
@@ -80,7 +85,7 @@ class Item(Resource):
 class ItemList(Resource):
     def get(self):
         # Were getting all the items and looping through them - using list comprehension
-        return { 'items': [item.json() for item in ItemModel.query.ll] }
+        return { 'items': [item.json() for item in ItemModel.query.all] }
         # Another implementation mapping a function to an element - using map
         # (helpful when working with others programming in a diffrent language,
         # also more stackable )
