@@ -135,7 +135,28 @@ with resources that is what they see and when our API responds it responds with
 # The model gives is more access without populating our resource
 
 
-# 81. Stopped at creating user and item models
 # I created 10s of different versions incrementally to make sure things were
 # working along the way
 # Test it each and every time
+
+# Git is a type of version control
+    # useful for collaboration and error control
+
+# What is a repository?
+# Git is a set of layers
+    # Each layer has a function, and you use Git to move files between those layers
+    # Layers provide error control, redundancy, and more
+    # Layers:
+        1. The file system - any files with in your system
+            - Files in your system: Any file that you have created is in this layer
+            - "INSTALL" GIT: Initialize GIT
+            - Add files to next commit (Staging Area): Tell GIT to include flies in next commit
+            - Commit files to local repository: Commit them - This creates a snapshot of them
+            - Push files to cloud: Send them to a GIT Service (e.g. Github)
+        # Git is just a server that hosts your servers
+# Layers
+    # Each layer has a function
+    # It is optional to push your commits to a remote repository, although that provides redundancy
+    # The layers are physical (inside a hidden .git folder)
+    
+# That is all git is snapshots of your code
