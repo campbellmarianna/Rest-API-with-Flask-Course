@@ -72,7 +72,7 @@ class Item(Resource):
         item = ItemModel.find_by_name(name) # Item is the item we found in the database
 
         if item is None:
-            item = ItemModel.find_by_name(name, **data)
+            item = ItemModel(name, **data)
 
         else: # update an item if it was already there
             item.price = data['price']

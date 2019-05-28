@@ -14,8 +14,8 @@ class StoreModel(db.Model):
     function it won't be used."""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    
-    items = db.relationship('ItemModel', lazy='dymaic') # lists of item models - one to many
+
+    items = db.relationship('ItemModel', lazy='dynamic') # lists of item models - one to many
 
     def __init__(self, name):
         self.name = name
