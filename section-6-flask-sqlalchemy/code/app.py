@@ -5,6 +5,7 @@ from flask_jwt import JWT
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList
+from resources.store import Store, StoreList
 
 app = Flask(__name__) # Flask is going to be our app and this app is going to have routes
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db' # were saying data.db is going to run at the root of our folder
@@ -20,6 +21,7 @@ app.secret_key = 'jose'
 # imported from Flask-restful allows us to very easily add these routes it (okay for this resource you can get and post)
 api = Api(app)
 
+# important to import what you want to be in the database such as Item and Store models if you want them as tables in the database
 # SQLAlchemy creates the data.db for us but it doesn't put any tables in it, sp were going to tell to do so
 @app.before_first_request # before the first request runs it will do the code below
 def create_tables():
@@ -29,6 +31,8 @@ jwt = JWT(app, authenticate, identity) #/auth
 
 api.add_resource(Item, '/item/<string:name>') # now this resource we have creating now can be accessiable via our API route
 api.add_resource(ItemList, '/items')
+api.add_resource(Store, '/store/<string:name>')
+api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
 
 if __name__ == '__main__':
