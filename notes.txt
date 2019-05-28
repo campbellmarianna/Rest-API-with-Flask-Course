@@ -158,5 +158,37 @@ with resources that is what they see and when our API responds it responds with
     # Each layer has a function
     # It is optional to push your commits to a remote repository, although that provides redundancy
     # The layers are physical (inside a hidden .git folder)
-    
+
 # That is all git is snapshots of your code
+# If we already have a git repository on our computer we can create
+# `git pull` you can use this command to download remote changes
+
+# SSH key is a way to encrypt information
+    # anybody that has the public key and decrypt information
+        # anybody that doesn't have the public key cannot decrypt
+        # you would share the public key with anyone you send information to
+        # and you want to be able to decrypt it
+    # anybody that has the private key can encrypt information
+    # You can create in SSH locally, generate a public key and share it with Github
+
+# Issues that can take place
+# README file
+    # very helpful when working with others
+    # to create one in the terminal - use command `vim README.md`
+    Example:
+        # My awesome REST API
+
+        ## Installation
+
+        ```
+        pip install Flask
+        python app.py
+        ```
+
+        ## Description
+
+        ## Implementation
+
+        This project is implemented using Flask, and is a REST API for a store.
+
+    # Now to exist use command `:wq`
